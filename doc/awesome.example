@@ -1,0 +1,75 @@
+-- This piece of LUA integrates pynoair to awesome v3.2
+
+-- The current show is displayed with its associated color and a
+-- progress bar displaying the percentage of elapsed time. When the
+-- mouse goes over the widget it pops a naughty notification
+-- displaying the next 5 upcomings shows. A mouse click on the widget
+-- updates the XML file.
+
+function noair_colorize(str)
+   str = string.gsub(str, "^yellow", "<span color='#FFFF00'>")
+   str = string.gsub(str, "^purple", "<span color='#FF00FF'>")
+   str = string.gsub(str, "^blue",   "<span color='#0000FF'>")
+   str = string.gsub(str, "^red",    "<span color='#FF0000'>")
+   str = string.gsub(str, "^white",  "<span color='#FFFFFF'>")
+   str = string.gsub(str, "^green",  "<span color='#00FF00'>")
+
+   return str .. "</span>"
+end
+
+function noair_widget_refresh()
+   local cmd = "pynoair --nb-next-display 0 --nb-past-display 0 --output-format '%r%d' --display-extra --extra-format '%p'"
+   local f = io.popen(cmd)
+   local l = f:read()
+
+   if (l) then
+	  if string.find(l, "-yellow-") then
+		 print("oui")
+	  end
+
+	  noair_widget.text = "NoAir: " .. noair_colorize(awful.util.escape(l)) .. ' '
+	  noair_bar:bar_data_add("percent", f:read())
+   end
+
+   f:close()
+end
+
+function noair_naughty_open()
+   local cmd = "pynoair --nb-past-display 0 --nb-next-display 5 --output-format '%r%D : %d' --date-format '%H:%M' --no-display-extra"
+   local f = io.popen(cmd)
+
+   -- Skip the current show
+   f:read()
+
+   local output = { "Prochainement sur Nolife :" }
+   for l in f:lines() do
+	  table.insert(output, noair_colorize(awful.util.escape(l)))
+   end
+
+   noair_notify = naughty.notify({
+									text     = table.concat(output, '\n'),
+									position = "top_right",
+									width    = 500
+								 })
+end
+
+function noair_naughty_close()
+   naughty.destroy(noair_notify)
+end
+
+noair_widget = widget({ type = "textbox", name = "noair_widget", align = "right" })
+noair_widget:buttons({button({ }, 1, function() awful.util.spawn("pynoair --update-only") end)})
+
+noair_bar              = widget({ type = "progressbar", name = "noair_bar", align = "right" })
+noair_bar.width        = 30
+noair_bar.height       = 0.4
+noair_bar.border_width = 0
+noair_bar:bar_properties_set("percent", {
+    bg     = widget_bg,
+    fg     = widget_fg_center,
+    fg_end = widget_fg_end,
+    fg_off = widget_fg_off
+})
+awful.hooks.timer.register(1, noair_widget_refresh)
+noair_widget.mouse_enter = function () noair_naughty_open() end
+noair_widget.mouse_leave = function () noair_naughty_close() end
