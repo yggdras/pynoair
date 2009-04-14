@@ -8,7 +8,8 @@
 
 function noair_colorize(str)
    str = string.gsub(str, "^yellow", "<span color='#FFFF00'>")
-   str = string.gsub(str, "^purple", "<span color='#FF00FF'>")
+   str = string.gsub(str, "^pink",   "<span color='#FF00FF'>")
+   str = string.gsub(str, "^purple", "<span color='#C900FF'>")
    str = string.gsub(str, "^blue",   "<span color='#0000FF'>")
    str = string.gsub(str, "^red",    "<span color='#FF0000'>")
    str = string.gsub(str, "^white",  "<span color='#FFFFFF'>")
