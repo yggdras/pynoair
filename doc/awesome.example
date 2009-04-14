@@ -24,10 +24,6 @@ function noair_widget_refresh()
    local l = f:read()
 
    if (l) then
-	  if string.find(l, "-yellow-") then
-		 print("oui")
-	  end
-
 	  noair_widget.text = "NoAir: " .. noair_colorize(awful.util.escape(l)) .. ' '
 	  noair_bar:bar_data_add("percent", f:read())
    end
