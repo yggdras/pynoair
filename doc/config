@@ -25,8 +25,12 @@
 ## Check the date manual page for availables interpreted sequences
 #date_format = %H:%M
 
-## Boolean enabling the verbose mode or not
-#verbose = False
+## Extra informations format to display
+## Here are the interpreted sequences you can use in extra_format:
+## %e - Elapsed time
+## %d - Duration
+## %p - Ratio in percent
+#extra_format = "\tElapsed: %e/%d [%p%]
 
 ## Boolean enabling the extra informations for current show
 #display_extra = True

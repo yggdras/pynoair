@@ -39,6 +39,7 @@ class PyNoAir(object):
         self.__xml_file        = os.path.expanduser("~/.pynoair/noair.xml")
         self.__output_format   = "[%y] (%D) %d"
         self.__date_format     = "%H:%M"
+        self.__extra_format    = "\tElapsed %e/%d [%p%]"
         self.__display_extra   = True
         self.__nb_past_display = 1
         self.__nb_next_display = 2
@@ -104,6 +105,8 @@ class PyNoAir(object):
                 self.__output_format = val
             elif k == "date_format":
                 self.__date_format = val
+            elif k == "extra_format":
+                self.__extra_format = val
             elif k == "display_extra":
                 if val == "True":
                     self.__display_extra = True
@@ -234,9 +237,9 @@ class PyNoAir(object):
             dict["timestamp"] = t
             self.__data.append(dict)
 
-    def get_infos(self):
+    def display_extra(self):
         """
-        Compute extra informations on current show
+        Compute and display extra informations on current show
         """
         if self.__on_air < len(self.__data) - 1:
             begin = self.__data[self.__on_air]['timestamp']
@@ -248,11 +251,19 @@ class PyNoAir(object):
             delta2   = end - begin
             mod2     = delta2 % 60
             duration = str(delta2 / 60) + ':' + (mod2 > 10 and str(mod2) or '0' + str(mod2))
-
-            return "\tElapsed: " + elapsed + "/" + str(duration) + \
-                " [" + str(int(float(delta1)/delta2*100)) + "%]"
+            percent  = str(int(float(delta1)/delta2*100))
         else:
-            return "\tElapsed: n/a [n/a%]"
+            elapsed  = "n/a"
+            duration = "n/a"
+            percent  = "n/a"
+
+        o = self.__extra_format
+
+        o = o.replace("%e", elapsed)
+        o = o.replace("%d", duration)
+        o = o.replace("%p", percent)
+
+        return o
 
     def display(self):
         """
@@ -270,7 +281,7 @@ class PyNoAir(object):
             elif n == i:
                 o = o.replace("%y", "now ")
                 if self.__display_extra:
-                    o = o + "\n" + self.get_infos()
+                    o = o + "\n" + self.display_extra()
             else:
                 o = o.replace("%y", "next")
 
@@ -305,8 +316,10 @@ class PyNoAir(object):
         output("-U|--update-only             : Download XML file and exit")
         output("-o|--output-format \"<format>\": Output format to display")
         output("-d|--date-format \"<format>\"  : Date format to display")
+        output("-x|--extra-format \"<format>\" : Extra informations format to display")
         output("-V|--verbose                 : Enable verbose mode")
         output("-e|--no-display-extra        : Do not display extra informations")
+        output("-E|--display-extra           : Display extra informations")
         output("-p|--nb-past-display <num>   : Number of past shows to display")
         output("-n|--nb-next-display <num>   : Number of upcoming shows to display")
         output("-D|--download-delay <num>    : Delay in minutes before the XML gets updated")
@@ -353,10 +366,15 @@ def main():
         elif arg == "-d" or arg == "--date-format":
             conf['date_format'] = val
             i += 1
+        elif arg == "-x" or arg == "--extra-format":
+            conf['extra_format'] = val
+            i += 1
         elif arg == "-V" or arg == "--verbose":
             conf['verbose'] = "True"
         elif arg == "-e" or arg == "--no-display-extra":
             conf['display_extra'] = "False"
+        elif arg == "-E" or arg == "--display-extra":
+            conf['display_extra'] = "True"
         elif arg == "-p" or arg == "--nb-past-display":
             conf['nb_past_display'] = val
             i += 1
