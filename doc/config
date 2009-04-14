@@ -1,0 +1,41 @@
+## pynoair - configuration file
+##
+## This sample file shows you every customizable options, commented
+## with '#' and set to their default values, suit it to your needs.
+
+## Remote XML file location
+#xml_url = http://www.nolife-tv.com/noair/noair.xml
+
+## Output format to display
+## Here are the interpreted sequences you can use in output_format:
+## %y - Status
+## %d - Description
+## %D - Date
+## %t - Title
+## %s - Sub-title
+## %a - Detail
+## %l - LevelType
+## %r - Color
+## %c - CSA
+## %u - Url
+## %o - Screenshot
+#output_format = [%y] (%D) %d
+
+## Date format to display
+## Check the date manual page for availables interpreted sequences
+#date_format = %H:%M
+
+## Boolean enabling the verbose mode or not
+#verbose = False
+
+## Boolean enabling the extra informations for current show
+#display_extra = True
+
+## Number of past shows to display
+#nb_past_display = 1
+
+## Number of upcoming shows to display
+#nb_next_display = 2
+
+## Delay in minutes before the XML gets updated
+#download_delay = 15

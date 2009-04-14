@@ -1,0 +1,22 @@
+Présentation
+------------
+
+pynoair  est un  script modulaire  et  léger écrit  en Python  (2.5.4)
+permettant d'exploiter  le fichier XML mis à  disposition contenant la
+programmation précise de la chaîne de TV française Nolife.
+
+http://www.nolife-tv.com/
+
+Son but est  de fournir une interface simple en  mode texte en offrant
+la  possibilité  de le  personnaliser  au  maximum,  il devient  ainsi
+facilement intégrable  dans des greffons, scripts,  logiciels tels que
+Conky etc.
+
+Configuration
+-------------
+
+Un fichier d'exemple est disponible dans le répertoire doc/, copiez le
+dans ~/.pynoair/ et modifiez le à selon votre convenance.
+
+La  configuration  peut aussi  se  faire  par  la ligne  de  commande,
+consultez l'aide pour plus d'informations (pynoair --help).
