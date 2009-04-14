@@ -12,6 +12,22 @@ la  possibilité  de le  personnaliser  au  maximum,  il devient  ainsi
 facilement intégrable  dans des greffons, scripts,  logiciels tels que
 Conky etc.
 
+Installation
+------------
+
+Assurez vous d'être dans le répertoire du projet.
+
+Rendez le script install.sh exécutable :
+$ chmod +x install.sh
+
+Avec les privilèges administrateur, lancez la commande suivante :
+# ./install.sh install
+
+Pour plus d'informations :
+$ ./install.sh help
+
+Éditez le script install.sh si vous voulez le préfixe d'installation.
+
 Configuration
 -------------
 
