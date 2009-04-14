@@ -29,7 +29,7 @@ import urllib
 import datetime
 import xml.parsers.expat
 
-VERSION="0.9.0"
+VERSION="0.9.1"
 
 class PyNoAir(object):
     def __init__(self):
