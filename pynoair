@@ -30,6 +30,13 @@ import datetime
 import xml.parsers.expat
 
 VERSION="0.9.1"
+COLOURS= { 'yellow': "\033[1;33m",
+           'pink'  : "\033[1;35m",
+           'blue'  : "\033[0;34m",
+           'red'   : "\033[0;31m",
+           'purple': "\033[0;35m",
+           'green' : "\033[0;32m",
+           'white' : "\033[0m" }
 
 class PyNoAir(object):
     def __init__(self):
@@ -45,6 +52,7 @@ class PyNoAir(object):
         self.__nb_next_display = 2
         self.__verbose         = False
         self.__updated         = False
+        self.__colours         = False
         self.__download_delay  = 15
         self.__data            = []
         self.__date_pattern    = re.compile("(\d{4})/(\d{2})/(\d{2}) (\d{2}):(\d{2}):(\d{2})")
@@ -116,6 +124,11 @@ class PyNoAir(object):
                 self.__nb_past_display = int(val)
             elif k == "nb_next_display":
                 self.__nb_next_display = int(val)
+            elif k == "colours":
+                if val == "True":
+                    self.__colours = True
+                else:
+                    self.__colours = False
             elif k == "verbose":
                 if val == "True":
                     self.__verbose = True
@@ -296,6 +309,10 @@ class PyNoAir(object):
             o = o.replace("%c", d['csa'])
             o = o.replace("%u", d['url'])
             o = o.replace("%o", d['screenshot'])
+
+            if self.__colours:
+                o = COLOURS[d['color']] + o + COLOURS['white']
+
             output(o)
 
     def show_version(self):
@@ -318,6 +335,8 @@ class PyNoAir(object):
         output("-d|--date-format \"<format>\"  : Date format to display")
         output("-x|--extra-format \"<format>\" : Extra informations format to display")
         output("-V|--verbose                 : Enable verbose mode")
+        output("-c|--with-colours            : Enable colours")
+        output("-C|--without-colours         : Disable colours")
         output("-e|--no-display-extra        : Do not display extra informations")
         output("-E|--display-extra           : Display extra informations")
         output("-p|--nb-past-display <num>   : Number of past shows to display")
@@ -371,6 +390,10 @@ def main():
             i += 1
         elif arg == "-V" or arg == "--verbose":
             conf['verbose'] = "True"
+        elif arg == "-c" or arg == "--with-colours":
+            conf['colours'] = "True"
+        elif arg == "-C" or arg == "--without-colours":
+            conf['colours'] = "False"
         elif arg == "-e" or arg == "--no-display-extra":
             conf['display_extra'] = "False"
         elif arg == "-E" or arg == "--display-extra":

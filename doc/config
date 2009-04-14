@@ -32,6 +32,9 @@
 ## %p - Ratio in percent
 #extra_format = "\tElapsed: %e/%d [%p%]
 
+## Boolean enabling colours
+#colours = False
+
 ## Boolean enabling the extra informations for current show
 #display_extra = True
 
