@@ -238,7 +238,7 @@ class PyNoAir(object):
         """
         Compute extra informations on current show
         """
-        if self.__on_air < len(self.__data):
+        if self.__on_air < len(self.__data) - 1:
             begin = self.__data[self.__on_air]['timestamp']
             end   = self.__data[self.__on_air + 1]['timestamp']
 
