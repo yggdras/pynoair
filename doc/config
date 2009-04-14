@@ -19,7 +19,7 @@
 ## %c - CSA
 ## %u - Url
 ## %o - Screenshot
-#output_format = [%y] (%D) %d
+#output_format = [%y] %D : %d
 
 ## Date format to display
 ## Check the date manual page for availables interpreted sequences

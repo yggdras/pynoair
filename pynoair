@@ -37,7 +37,7 @@ class PyNoAir(object):
         self.__xml_url         = "http://www.nolife-tv.com/noair/noair.xml"
         self.__last_dl_file    = os.path.expanduser("~/.pynoair/last_downloaded")
         self.__xml_file        = os.path.expanduser("~/.pynoair/noair.xml")
-        self.__output_format   = "[%y] (%D) %d"
+        self.__output_format   = "[%y] %D : %d"
         self.__date_format     = "%H:%M"
         self.__extra_format    = "\tElapsed %e/%d [%p%]"
         self.__display_extra   = True
