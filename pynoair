@@ -169,8 +169,8 @@ class PyNoAir(object):
         Download the XML file from the given url
         """
         if self.__updated:
-            error("[ERROR] The XML file has been re-downloaded and is still the same, " \
-                      "Alex should update it on the remote server!!")
+            error("[ERROR] The XML file has been re-downloaded and errors remain, " \
+                      "maybe check the url: %s" % self.__xml_url)
 
         try:
             self.verbose("Downloading %s" % self.__xml_url)
@@ -198,10 +198,11 @@ class PyNoAir(object):
             p.StartElementHandler = self.add_entry
             p.ParseFile(fd)
         except xml.parsers.expat.ExpatError:
-            if os.path.exists(self.__xml_file):
-                os.remove(self.__xml_file)
-            error("[ERROR] The downloaded XML file seems to be invalid, " \
-                      "maybe check the url: %s" % self.__xml_url)
+            self.verbose("[WARNING] The downloaded XML file seems to be invalid, " \
+                             "trying to fix it...")
+            self.download_xml()
+            self.prepare()
+            return
 
         fd.close()
 
