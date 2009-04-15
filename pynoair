@@ -42,7 +42,6 @@ class PyNoAir(object):
     def __init__(self):
         # Attributes and their default values
         self.__xml_url         = "http://www.nolife-tv.com/noair/noair.xml"
-        self.__last_dl_file    = os.path.expanduser("~/.pynoair/last_downloaded")
         self.__xml_file        = os.path.expanduser("~/.pynoair/noair.xml")
         self.__output_format   = "[%y] %D : %d"
         self.__date_format     = "%H:%M"
@@ -141,19 +140,13 @@ class PyNoAir(object):
         """
         Make sure everything is fine before displaying anything
         """
-        if not os.path.exists(self.__xml_file):
-            self.verbose("XML file not found.")
-            self.download_xml()
-
         try:
-            fd = open(self.__last_dl_file, 'r')
-            if self.__now - int(fd.read()) >= self.__download_delay*60:
+            mtime = int(os.path.getmtime(self.__xml_file))
+            if self.__now - mtime >= self.__download_delay*60:
                 self.verbose("XML file too old.")
                 self.download_xml()
-
-            fd.close()
-        except IOError:
-            self.verbose("Apparently no XML has already been downloaded.")
+        except OSError:
+            self.verbose("XML file not found.")
             self.download_xml()
 
         self.parse_xml()
@@ -188,10 +181,6 @@ class PyNoAir(object):
 
         self.__updated = True
 
-        fd = open(self.__last_dl_file, 'w')
-        fd.write("%i\n" % self.__now)
-        fd.close()
-
         if update_only:
             sys.exit(0)
 
@@ -209,8 +198,8 @@ class PyNoAir(object):
             p.StartElementHandler = self.add_entry
             p.ParseFile(fd)
         except xml.parsers.expat.ExpatError:
-            if os.path.exists(self.__last_dl_file):
-                os.remove(self.__last_dl_file)
+            if os.path.exists(self.__xml_file):
+                os.remove(self.__xml_file)
             error("[ERROR] The downloaded XML file seems to be invalid, " \
                       "maybe check the url: %s" % self.__xml_url)
 
