@@ -30,7 +30,7 @@
 ## %e - Elapsed time
 ## %d - Duration
 ## %p - Ratio in percent
-#extra_format = "\tElapsed: %e/%d [%p%]
+#extra_format = "\n\tElapsed: %e/%d [%p%]
 
 ## Boolean enabling colours
 #colours = False

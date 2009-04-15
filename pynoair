@@ -45,7 +45,7 @@ class PyNoAir(object):
         self.__xml_file        = os.path.expanduser("~/.pynoair/noair.xml")
         self.__output_format   = "[%y] %D : %d"
         self.__date_format     = "%H:%M"
-        self.__extra_format    = "\tElapsed %e/%d [%p%]"
+        self.__extra_format    = "\n\tElapsed %e/%d [%p%]"
         self.__display_extra   = True
         self.__nb_past_display = 1
         self.__nb_next_display = 2
@@ -283,7 +283,7 @@ class PyNoAir(object):
             elif n == i:
                 o = o.replace("%y", "now ")
                 if self.__display_extra:
-                    o = o + "\n" + self.display_extra()
+                    o = o + self.display_extra()
             else:
                 o = o.replace("%y", "next")
 
