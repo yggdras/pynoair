@@ -46,6 +46,7 @@ class PyNoAir(object):
         self.__output_format   = "[%y] %D : %d"
         self.__date_format     = "%H:%M"
         self.__extra_format    = "\n\tElapsed %e/%d [%p%]"
+        self.__outdated_format = "<XML file is outdated>"
         self.__display_extra   = True
         self.__nb_past_display = 1
         self.__nb_next_display = 2
@@ -114,6 +115,8 @@ class PyNoAir(object):
                 self.__date_format = val
             elif k == "extra_format":
                 self.__extra_format = val
+            elif k == "outdated_format":
+                self.__outdated_format = val
             elif k == "display_extra":
                 if val == "True":
                     self.__display_extra = True
@@ -274,6 +277,11 @@ class PyNoAir(object):
         """
         self.prepare()
         i = self.__on_air
+
+        if i == len(self.__data) - 1:
+            output(self.__outdated_format)
+            return
+
         for n in range(i - self.__nb_past_display, i + self.__nb_next_display + 1):
             d = self.__data[n]
             o = self.__output_format
@@ -317,21 +325,22 @@ class PyNoAir(object):
         """
         output("Usage: pynoair <options>")
         output("Options list:")
-        output("-h|--help                    : This helpful message")
-        output("-v|--version                 : Print version and exit")
-        output("-u|--update                  : Force XML file download")
-        output("-U|--update-only             : Download XML file and exit")
-        output("-o|--output-format \"<format>\": Output format to display")
-        output("-d|--date-format \"<format>\"  : Date format to display")
-        output("-x|--extra-format \"<format>\" : Extra informations format to display")
-        output("-V|--verbose                 : Enable verbose mode")
-        output("-c|--with-colours            : Enable colours")
-        output("-C|--without-colours         : Disable colours")
-        output("-e|--no-display-extra        : Do not display extra informations")
-        output("-E|--display-extra           : Display extra informations")
-        output("-p|--nb-past-display <num>   : Number of past shows to display")
-        output("-n|--nb-next-display <num>   : Number of upcoming shows to display")
-        output("-D|--download-delay <num>    : Delay in minutes before the XML gets updated")
+        output("-h|--help                      : This helpful message")
+        output("-v|--version                   : Print version and exit")
+        output("-u|--update                    : Force XML file download")
+        output("-U|--update-only               : Download XML file and exit")
+        output("-o|--output-format \"<format>\"  : Output format to display")
+        output("-d|--date-format \"<format>\"    : Date format to display")
+        output("-x|--extra-format \"<format>\"   : Extra informations format to display")
+        output("-d|--outdated-format \"<format>\": Format when the XML file is outdated")
+        output("-V|--verbose                   : Enable verbose mode")
+        output("-c|--with-colours              : Enable colours")
+        output("-C|--without-colours           : Disable colours")
+        output("-e|--no-display-extra          : Do not display extra informations")
+        output("-E|--display-extra             : Display extra informations")
+        output("-p|--nb-past-display <num>     : Number of past shows to display")
+        output("-n|--nb-next-display <num>     : Number of upcoming shows to display")
+        output("-D|--download-delay <num>      : Delay in minutes before the XML gets updated")
 
 def error(err):
     """
@@ -377,6 +386,9 @@ def main():
             i += 1
         elif arg == "-x" or arg == "--extra-format":
             conf['extra_format'] = val
+            i += 1
+        elif arg == "-d" or arg == "--outdated-format":
+            conf['outdated_format'] = val
             i += 1
         elif arg == "-V" or arg == "--verbose":
             conf['verbose'] = "True"
