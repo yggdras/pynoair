@@ -332,7 +332,7 @@ class PyNoAir(object):
         output("-o|--output-format \"<format>\"  : Output format to display")
         output("-d|--date-format \"<format>\"    : Date format to display")
         output("-x|--extra-format \"<format>\"   : Extra informations format to display")
-        output("-d|--outdated-format \"<format>\": Format when the XML file is outdated")
+        output("-t|--outdated-format \"<format>\": Format when the XML file is outdated")
         output("-V|--verbose                   : Enable verbose mode")
         output("-c|--with-colours              : Enable colours")
         output("-C|--without-colours           : Disable colours")
@@ -387,7 +387,7 @@ def main():
         elif arg == "-x" or arg == "--extra-format":
             conf['extra_format'] = val
             i += 1
-        elif arg == "-d" or arg == "--outdated-format":
+        elif arg == "-t" or arg == "--outdated-format":
             conf['outdated_format'] = val
             i += 1
         elif arg == "-V" or arg == "--verbose":
