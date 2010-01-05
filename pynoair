@@ -54,6 +54,7 @@ class PyNoAir(object):
         self.__updated         = False
         self.__colours         = False
         self.__download_delay  = 15
+        self.__leveltypes      = "80, 90, 100"
         self.__data            = []
         self.__date_pattern    = re.compile("(\d{4})/(\d{2})/(\d{2}) (\d{2}):(\d{2}):(\d{2})")
         self.__now             = None
@@ -138,6 +139,8 @@ class PyNoAir(object):
                     self.__verbose = False
             elif k == "download_delay":
                 self.__download_delay = int(val)
+            elif k == "leveltypes":
+                self.__leveltypes = val
 
     def prepare(self):
         """
@@ -282,19 +285,18 @@ class PyNoAir(object):
             output(self.__outdated_format)
             return
 
-        for n in range(i - self.__nb_past_display, i + self.__nb_next_display + 1):
+        # The shows we found
+        past = []
+        next = []
+
+        # We are not going to display every result
+        # So if we want to display self.__nb_????_display results we might
+        # have to search for more
+        # That's why we are going to search in the whole file
+        l = len(self.__data)
+        for n in range(0, l):
             d = self.__data[n]
             o = self.__output_format
-
-            # Let's clean that later ;)
-            if n < i:
-                o = o.replace("%y", "past")
-            elif n == i:
-                o = o.replace("%y", "now ")
-                if self.__display_extra:
-                    o = o + self.display_extra()
-            else:
-                o = o.replace("%y", "next")
 
             o = o.replace("%D", time.strftime(self.__date_format, \
                                                   time.localtime(d['timestamp'])))
@@ -311,7 +313,33 @@ class PyNoAir(object):
             if self.__colours:
                 o = COLOURS[d['color']] + o + COLOURS['white']
 
-            output(o)
+            # Let's clean that later ;)
+            if n < i:
+                o = o.replace("%y", "past")
+                # We don't display the show if its leveltype wasn't selected
+                if d['leveltype'] in self.__leveltypes:
+                    past.append(o)
+            elif n == i:
+                o = o.replace("%y", "now ")
+                if self.__display_extra:
+                    o = o + self.display_extra()
+                    # We always display the curent show
+                    now = o
+            else:
+                o = o.replace("%y", "next")
+                # We don't display the show if its leveltype wasn't selected
+                if d['leveltype'] in self.__leveltypes:
+                    next.append(o)
+
+        # Now we display what is inside the lists
+        l = len(past)
+        for n in range(min(l, self.__nb_past_display), 0, -1):
+            output(past[l-n])
+
+        output(now)
+
+        for n in range(0, min(len(next), self.__nb_next_display)):
+            output(next[n])
 
     def show_version(self):
         """
@@ -341,6 +369,8 @@ class PyNoAir(object):
         output("-p|--nb-past-display <num>     : Number of past shows to display")
         output("-n|--nb-next-display <num>     : Number of upcoming shows to display")
         output("-D|--download-delay <num>      : Delay in minutes before the XML gets updated")
+        output("-l|--leveltypes \"<leveltypes>\" : Leveltypes to display, separated by commas")
+        output("                                 Levels are: 80 (Indies), 90 (J-Music), 100 (others)")
 
 def error(err):
     """
@@ -408,6 +438,9 @@ def main():
             i += 1
         elif arg == "-D" or arg == "--download-delay":
             conf['download_delay'] = val
+            i += 1
+        elif arg == "-l" or arg == "--leveltypes":
+            conf['leveltypes'] = val
             i += 1
         else:
             error("[ERROR] Unknown option: %s" % arg)

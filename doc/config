@@ -49,3 +49,7 @@
 
 ## Delay in minutes before the XML gets updated
 #download_delay = 15
+
+## Leveltypes filter, separated by commas
+## Levels are: 80 (Indies), 90 (J-Music), 100 (others)
+#leveltypes = "80, 90, 100"
