@@ -39,10 +39,10 @@ COLOURS= { 'yellow': "\033[1;33m",
            'white' : "\033[0m" }
 
 class PyNoAir(object):
-    def __init__(self):
+    def __init__(self, base_config = "~/.pynoair/"):
         # Attributes and their default values
         self.__xml_url         = "http://www.nolife-tv.com/noair/noair.xml"
-        self.__xml_file        = os.path.expanduser("~/.pynoair/noair.xml")
+        self.__xml_file        = os.path.expanduser(base_config + "noair.xml")
         self.__output_format   = "[%y] %D : %d"
         self.__date_format     = "%H:%M"
         self.__extra_format    = "\n\tElapsed %e/%d [%p%]"
@@ -68,7 +68,7 @@ class PyNoAir(object):
             except OSError, e:
                 error(e)
 
-        self.load_config_file(os.path.expanduser("~/.pynoair/config"))
+        self.load_config_file(os.path.expanduser(base_config + "config"))
         self.set_current_time()
 
     def load_config_file(self, path):
