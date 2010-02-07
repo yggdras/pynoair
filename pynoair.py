@@ -286,7 +286,10 @@ class PyNoAir(object):
         """
         Display current show
         """
-        self.prepare()
+        if not self.__on_air or len(self.__data) == 0:
+            # call prepare() only if we haven't called it before
+            self.prepare()
+
         i = self.__on_air
 
         if i == len(self.__data) - 1:
