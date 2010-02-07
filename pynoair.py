@@ -47,6 +47,7 @@ class PyNoAir(object):
         self.__date_format     = "%H:%M"
         self.__extra_format    = "\n\tElapsed %e/%d [%p%]"
         self.__outdated_format = "<XML file is outdated>"
+        self.__display_now     = True
         self.__display_extra   = True
         self.__nb_past_display = 1
         self.__nb_next_display = 2
@@ -122,6 +123,11 @@ class PyNoAir(object):
                 self.__extra_format = val
             elif k == "outdated_format":
                 self.__outdated_format = val
+            elif k == "display_now":
+                if val == "True":
+                    self.__display_now = True
+                else:
+                    self.__display_now = False
             elif k == "display_extra":
                 if val == "True":
                     self.__display_extra = True
@@ -356,7 +362,8 @@ class PyNoAir(object):
         for n in range(min(l, self.__nb_past_display), 0, -1):
             output(past[l-n])
 
-        output(now)
+        if self.__display_now:
+            output(now)
 
         for n in range(0, min(len(next), self.__nb_next_display)):
             output(next[n])
