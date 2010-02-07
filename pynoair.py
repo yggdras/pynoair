@@ -60,6 +60,10 @@ class PyNoAir(object):
         self.__now             = None
         self.__on_air          = None
 
+        # Default values for missing fields in XML file
+        self.__default_url = ""
+        self.__default_screenshot = ""
+
         base = os.path.dirname(self.__xml_file)
         if not os.path.exists(base):
             self.verbose("Creating directory %s" % base)
@@ -141,6 +145,10 @@ class PyNoAir(object):
                 self.__download_delay = int(val)
             elif k == "leveltypes":
                 self.__leveltypes = val
+            elif k == "default_url":
+                self.__default_url = val
+            elif k == "default_screenshot":
+                self.__default_screenshot = val
 
     def prepare(self):
         """
@@ -307,8 +315,15 @@ class PyNoAir(object):
             o = o.replace("%l", d['leveltype'])
             o = o.replace("%r", d['color'])
             o = o.replace("%c", d['csa'])
-            o = o.replace("%u", d['url'])
-            o = o.replace("%o", d['screenshot'])
+            # provide default url and screenshot if fields are missing
+            if d['url'] != "":
+                o = o.replace("%u", d['url'])
+            else:
+                o = o.replace("%u", self.__default_url)
+            if d['screenshot'] != "":
+                o = o.replace("%o", d['screenshot'])
+            else:
+                o = o.replace("%o", self.__default_screenshot)
 
             if self.__colours:
                 o = COLOURS[d['color']] + o + COLOURS['white']
