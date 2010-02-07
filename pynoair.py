@@ -340,6 +340,8 @@ class PyNoAir(object):
                     o = o + self.display_extra()
                     # We always display the curent show
                     now = o
+                else:
+                    now = o
             else:
                 o = o.replace("%y", "next")
                 # We don't display the show if its leveltype wasn't selected
