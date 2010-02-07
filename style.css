@@ -1,0 +1,32 @@
+table {
+  border-collapse: collapse;
+}
+
+table, tr, th, td {
+  border-bottom: 1px solid black;
+  padding: 0px;
+  border-spacing: 0px;
+  margin: 0px;
+}
+
+img.emission {
+  width: 100px;
+  padding-right: 10px;
+  border: none;
+}
+
+div.progress {
+  margin-top: 13px;
+  height: 20px;
+  margin-bottom: 13px;
+  width: 100px;
+  border: 2px solid black;
+}
+div.progress_current {
+  height: 20px;
+  background: brown;
+}
+
+td.écoulé {
+  font-weight: bold;
+}
