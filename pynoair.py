@@ -133,6 +133,11 @@ class PyNoAir(object):
                     self.__display_extra = True
                 else:
                     self.__display_extra = False
+            elif k == "display_now":
+                if val == "True":
+                    self.__display_now = True
+                else:
+                    self.__display_now = False
             elif k == "nb_past_display":
                 self.__nb_past_display = int(val)
             elif k == "nb_next_display":
@@ -347,7 +352,6 @@ class PyNoAir(object):
                 o = o.replace("%y", "now ")
                 if self.__display_extra:
                     o = o + self.display_extra()
-                    # We always display the curent show
                     now = o
                 else:
                     now = o
@@ -393,6 +397,7 @@ class PyNoAir(object):
         output("-C|--without-colours           : Disable colours")
         output("-e|--no-display-extra          : Do not display extra informations")
         output("-E|--display-extra             : Display extra informations")
+        output("-N|--no-display-current-show   : Do not display the current show")
         output("-p|--nb-past-display <num>     : Number of past shows to display")
         output("-n|--nb-next-display <num>     : Number of upcoming shows to display")
         output("-D|--download-delay <num>      : Delay in minutes before the XML gets updated")
@@ -457,6 +462,8 @@ def main():
             conf['display_extra'] = "False"
         elif arg == "-E" or arg == "--display-extra":
             conf['display_extra'] = "True"
+        elif arg == "-N" or arg == "--no-display-current-show":
+            conf['display_now'] = "False"
         elif arg == "-p" or arg == "--nb-past-display":
             conf['nb_past_display'] = val
             i += 1

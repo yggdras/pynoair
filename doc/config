@@ -38,6 +38,9 @@
 ## Boolean enabling colours
 #colours = False
 
+## Boolean enabling the display of the current show
+#display_now = True
+
 ## Boolean enabling the extra informations for current show
 #display_extra = True
 
