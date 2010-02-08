@@ -20,9 +20,11 @@
 # 02110-1301 USA.
 
 PREFIX="/usr/local/bin"
-EXEC="pynoair"
+EXEC="pynoair.py"
+SIMLINK="pynoair"
 
 CP="/bin/cp"
+LN="/bin/ln"
 RM="/bin/rm -f"
 CHMOD="/bin/chmod"
 
@@ -38,15 +40,17 @@ install()
 {
 	check_root
 	echo "Copying $EXEC to $PREFIX/$EXEC"
+	echo "Linking $PREFIX/$EXEC to $PREFIX/$SIMLINK"
 	$CP $EXEC $PREFIX/
 	$CHMOD 755 $PREFIX/$EXEC
+	$LN -sf $PREFIX/$EXEC $PREFIX/$SIMLINK
 }
 
 uninstall()
 {
 	check_root
-	echo "Removing $PREFIX/$EXEC"
-	$RM $PREFIX/$EXEC
+	echo "Removing $PREFIX/$EXEC, $PREFIX/$SIMLINK"
+	$RM $PREFIX/$EXEC $PREFIX/$SIMLINK
 }
 
 case "$1" in
