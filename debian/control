@@ -1,0 +1,24 @@
+Source: pynoair
+Section: misc
+Priority: extra
+Maintainer: Yggdras <yggdras@gmail.com>
+Build-Depends: cdbs, debhelper (>= 7), python-central (>=0.5.6)
+XS-Python-Version: >=2.4
+Standards-Version: 3.8.4
+Homepage: 
+
+Package: pynoair
+Architecture: all
+XB-Python-Version: ${python:Versions}
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: a modular script displaying what's on Nolife TV channel
+ pynoair  est un  script modulaire  et  léger écrit  en Python  (2.5.4)
+ permettant d'exploiter  le fichier XML mis à  disposition contenant la
+ programmation précise de la chaîne de TV française Nolife.
+ .
+ http://www.nolife-tv.com/
+ .
+ Son but est  de fournir une interface simple en  mode texte en offrant
+ la  possibilité  de le  personnaliser  au  maximum,  il devient  ainsi
+ facilement intégrable  dans des greffons, scripts,  logiciels tels que
+ Conky etc.
