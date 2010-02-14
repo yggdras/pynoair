@@ -14,13 +14,14 @@ def main():
     conf["output_format"]  = u'<tr>'
     conf["output_format"] += u'<td><a href="%u"><img class="emission" src="%o"></a></td>'
     conf["output_format"] += u'<td>%D</td>'
+    conf["output_format"] += u'<td style="background: %r;">&nbsp;</td>'
     conf["output_format"] += u'<td>%d</td>'
     conf["output_format"] += u'<td>%a</td>'
     conf["output_format"] += u'</tr>'
 
     conf["extra_format"]  = u'<tr>'
     conf["extra_format"] += u'<td><div class="progress"><div class="progress_current" style="width: %ppx;"></div></div></td>'
-    conf["extra_format"] += u'<td colspan=2 class="écoulé">Temps écoulé: %e/%d [%p%]</td>'
+    conf["extra_format"] += u'<td colspan=3 class="écoulé">Temps écoulé: %e/%d [%p%]</td>'
     conf["extra_format"] += u'</tr>'
 
     conf['default_url'] = 'http://nolife-tv.com'
@@ -41,7 +42,7 @@ def main():
     print '    <tr>'
     print '      <th>Image</th>'
     print '      <th>Début</th>'
-    print '      <th>Émission</th>'
+    print '      <th colspan=2>Émission</th>'
     print '      <th>Description</th>'
     print '    </tr>'
 
@@ -78,4 +79,3 @@ if __name__ == "__main__":
     cgitb.enable(display=1)
 
     main()
-
