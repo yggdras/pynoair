@@ -144,7 +144,7 @@ class PyNoAir(object):
                     self.__display_now = False
             # Deprecated
             elif k == "nb_past_display":
-                self.__from_display_range = "-" + int(val)
+                self.__from_display_range = -int(val)
             # Deprecated
             elif k == "nb_next_display":
                 self.__to_display_range = int(val)
