@@ -44,10 +44,18 @@
 ## Boolean enabling the extra informations for current show
 #display_extra = True
 
+## Set the 'from' bound of the range of shows to display
+#from_display_range = -1
+
+## Set the 'to' bound of the range of shows to display
+#to_display_range = 2
+
 ## Number of past shows to display
+## This option is deprecated, see from_display_range
 #nb_past_display = 1
 
 ## Number of upcoming shows to display
+## This option is deprecated, see to_display_range
 #nb_next_display = 2
 
 ## Delay in minutes before the XML gets updated

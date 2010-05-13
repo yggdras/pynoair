@@ -41,25 +41,29 @@ COLOURS= { 'yellow': "\033[1;33m",
 class PyNoAir(object):
     def __init__(self, base_config = "~/.pynoair/"):
         # Attributes and their default values
-        self.__xml_url         = "http://www.nolife-tv.com/noair/noair.xml"
-        self.__xml_file        = os.path.expanduser(base_config + "noair.xml")
-        self.__output_format   = "[%y] %D : %d"
-        self.__date_format     = "%H:%M"
-        self.__extra_format    = "\n\tElapsed %e/%d [%p%]"
-        self.__outdated_format = "<XML file is outdated>"
-        self.__display_now     = True
-        self.__display_extra   = True
-        self.__nb_past_display = 1
-        self.__nb_next_display = 2
-        self.__verbose         = False
-        self.__updated         = False
-        self.__colours         = False
-        self.__download_delay  = 15
-        self.__leveltypes      = "80, 90, 100"
-        self.__data            = []
-        self.__date_pattern    = re.compile("(\d{4})/(\d{2})/(\d{2}) (\d{2}):(\d{2}):(\d{2})")
-        self.__now             = None
-        self.__on_air          = None
+        self.__xml_url            = "http://www.nolife-tv.com/noair/noair.xml"
+        self.__xml_file           = os.path.expanduser(base_config + "noair.xml")
+        self.__output_format      = "[%y] %D : %d"
+        self.__date_format        = "%H:%M"
+        self.__extra_format       = "\n\tElapsed %e/%d [%p%]"
+        self.__outdated_format    = "<XML file is outdated>"
+        self.__display_now        = True
+        self.__display_extra      = True
+        # Deprecated
+        self.__nb_past_display    = 1
+        # Deprecated
+        self.__nb_next_display    = 2
+        self.__from_display_range = -1
+        self.__to_display_range   = 2
+        self.__verbose            = False
+        self.__updated            = False
+        self.__colours            = False
+        self.__download_delay     = 15
+        self.__leveltypes         = "80, 90, 100"
+        self.__data               =  []
+        self.__date_pattern       = re.compile("(\d{4})/(\d{2})/(\d{2}) (\d{2}):(\d{2}):(\d{2})")
+        self.__now                = None
+        self.__on_air             = None
 
         # Default values for missing fields in XML file
         self.__default_url = ""
@@ -138,10 +142,16 @@ class PyNoAir(object):
                     self.__display_now = True
                 else:
                     self.__display_now = False
+            # Deprecated
             elif k == "nb_past_display":
-                self.__nb_past_display = int(val)
+                self.__from_display_range = "-" + int(val)
+            # Deprecated
             elif k == "nb_next_display":
-                self.__nb_next_display = int(val)
+                self.__to_display_range = int(val)
+            elif k == "from_display_range":
+                self.__from_display_range = int(val)
+            elif k == "to_display_range":
+                self.__to_display_range = int(val)
             elif k == "colours":
                 if val == "True":
                     self.__colours = True
@@ -240,12 +250,16 @@ class PyNoAir(object):
         if not self.__on_air:
             error("[ERROR] Could not determine timestamps.")
 
-        # Adjust nb_past_display and nb_next_display index so they
+        # Adjust from_display_range and to_display_range index so they
         # don't go out boundaries
-        if self.__on_air - self.__nb_past_display < 0:
-            self.__nb_past_display = self.__on_air
-        if self.__on_air + self.__nb_next_display >= l:
-            self.__nb_next_display = l - self.__on_air - 1
+        if self.__on_air + self.__from_display_range < 0:
+            self.__from_display_range = - self.__on_air
+        if self.__on_air + self.__to_display_range < 0:
+            self.__to_display_range = - self.__on_air
+        if self.__on_air + self.__from_display_range >= l:
+            self.__from_display_range = l - self.__on_air - 1
+        if self.__on_air + self.__to_display_range >= l:
+            self.__to_display_range = l - self.__on_air - 1
 
     def add_entry(self, name, dict):
         """
@@ -363,13 +377,19 @@ class PyNoAir(object):
 
         # Now we display what is inside the lists
         l = len(past)
-        for n in range(min(l, self.__nb_past_display), 0, -1):
+
+        # Past
+        for n in range(min(l, -self.__from_display_range),
+                       max(0, -self.__to_display_range - 1), -1):
             output(past[l-n])
 
-        if self.__display_now:
+        # Now
+        if self.__from_display_range <= 0 and 0 <= self.__to_display_range:
             output(now)
 
-        for n in range(0, min(len(next), self.__nb_next_display)):
+        # Next
+        for n in range(max(0, self.__from_display_range - 1),
+                       min(len(next), self.__to_display_range)):
             output(next[n])
 
     def show_version(self):
@@ -398,8 +418,14 @@ class PyNoAir(object):
         output("-e|--no-display-extra          : Do not display extra informations")
         output("-E|--display-extra             : Display extra informations")
         output("-N|--no-display-current-show   : Do not display the current show")
-        output("-p|--nb-past-display <num>     : Number of past shows to display")
         output("-n|--nb-next-display <num>     : Number of upcoming shows to display")
+        output("                                 Deprecated: see --from-display-range")
+        output("-p|--nb-past-display <num>     : Number of past shows to display")
+        output("                                 Deprecated: see --to-display-range")
+        output("-f|--from-display-range <num>  : Set the 'from' range of displayed shows")
+        output("                                 Use a negative value for past shows");
+        output("-z|--to-display-range <num>    : Set the 'to' range of displayed shows")
+        output("                                 Use a negative value for past shows");
         output("-D|--download-delay <num>      : Delay in minutes before the XML gets updated")
         output("-l|--leveltypes \"<leveltypes>\" : Leveltypes to display, separated by commas")
         output("                                 Levels are: 80 (Indies), 90 (J-Music), 100 (others)")
@@ -464,11 +490,21 @@ def main():
             conf['display_extra'] = "True"
         elif arg == "-N" or arg == "--no-display-current-show":
             conf['display_now'] = "False"
+        # Deprecated
         elif arg == "-p" or arg == "--nb-past-display":
-            conf['nb_past_display'] = val
-            i += 1
+            if val:
+                conf['from_display_range'] = "-" + val
+                i += 1
+        # Deprecated
         elif arg == "-n" or arg == "--nb-next-display":
-            conf['nb_next_display'] = val
+            if val:
+                conf['to_display_range'] = val
+                i += 1
+        elif arg == "-f" or arg == "--from-display-range":
+            conf['from_display_range'] = val
+            i += 1
+        elif arg == "-z" or arg == "--to-display-range":
+            conf['to_display_range'] = val
             i += 1
         elif arg == "-D" or arg == "--download-delay":
             conf['download_delay'] = val
