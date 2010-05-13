@@ -418,9 +418,9 @@ class PyNoAir(object):
         output("-e|--no-display-extra          : Do not display extra informations")
         output("-E|--display-extra             : Display extra informations")
         output("-N|--no-display-current-show   : Do not display the current show")
-        output("-n|--nb-next-display <num>     : Number of upcoming shows to display")
-        output("                                 Deprecated: see --from-display-range")
         output("-p|--nb-past-display <num>     : Number of past shows to display")
+        output("                                 Deprecated: see --from-display-range")
+        output("-n|--nb-next-display <num>     : Number of upcoming shows to display")
         output("                                 Deprecated: see --to-display-range")
         output("-f|--from-display-range <num>  : Set the 'from' range of displayed shows")
         output("                                 Use a negative value for past shows");
