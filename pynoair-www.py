@@ -47,22 +47,19 @@ def main():
     print '    </tr>'
 
     
-    conf["nb_past_display"] = 5
-    conf["display_now"] = "False"
-    conf["nb_next_display"] = 0
+    conf["from_display_range"] = -5
+    conf["to_display_range"] = -1
     noair.set_config(conf)
     noair.display()
 
     # TODO: this should be displayed in another color
-    conf["nb_past_display"] = 0
-    conf["display_now"] = "True"
-    conf["nb_next_display"] = 0
+    conf["from_display_range"] = 0
+    conf["to_display_range"] = 0
     noair.set_config(conf)
     noair.display()
 
-    conf["nb_past_display"] = 0
-    conf["display_now"] = "False"
-    conf["nb_next_display"] = 20
+    conf["from_display_range"] = 1
+    conf["to_display_range"] = 20
     noair.set_config(conf)
     noair.display()
 
