@@ -47,7 +47,6 @@ class PyNoAir(object):
         self.__date_format        = "%H:%M"
         self.__extra_format       = "\n\tElapsed %e/%d [%p%]"
         self.__outdated_format    = "<XML file is outdated>"
-        self.__display_now        = True
         self.__display_extra      = True
         # Deprecated
         self.__nb_past_display    = 1
@@ -127,21 +126,11 @@ class PyNoAir(object):
                 self.__extra_format = val
             elif k == "outdated_format":
                 self.__outdated_format = val
-            elif k == "display_now":
-                if val == "True":
-                    self.__display_now = True
-                else:
-                    self.__display_now = False
             elif k == "display_extra":
                 if val == "True":
                     self.__display_extra = True
                 else:
                     self.__display_extra = False
-            elif k == "display_now":
-                if val == "True":
-                    self.__display_now = True
-                else:
-                    self.__display_now = False
             # Deprecated
             elif k == "nb_past_display":
                 self.__from_display_range = -int(val)
@@ -417,7 +406,6 @@ class PyNoAir(object):
         output("-C|--without-colours           : Disable colours")
         output("-e|--no-display-extra          : Do not display extra informations")
         output("-E|--display-extra             : Display extra informations")
-        output("-N|--no-display-current-show   : Do not display the current show")
         output("-p|--nb-past-display <num>     : Number of past shows to display")
         output("                                 Deprecated: see --from-display-range")
         output("-n|--nb-next-display <num>     : Number of upcoming shows to display")
@@ -489,7 +477,7 @@ def main():
         elif arg == "-E" or arg == "--display-extra":
             conf['display_extra'] = "True"
         elif arg == "-N" or arg == "--no-display-current-show":
-            conf['display_now'] = "False"
+            error("[ERROR] option %s was replaced by --from-display-range and --to-display-range" % arg)
         # Deprecated
         elif arg == "-p" or arg == "--nb-past-display":
             if val:
