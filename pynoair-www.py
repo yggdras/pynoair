@@ -26,7 +26,7 @@ def main():
 
     conf['default_url'] = 'http://nolife-tv.com'
     conf['default_screenshot'] = 'nolife-tv.png'
-    conf['leveltypes'] = "90, 100"
+    conf['leveltypes'] = "90, 100, 110"
 
     print 'Content-Type: text/html; charset=utf-8'
     print ''   # add additionnal new line to finish headers

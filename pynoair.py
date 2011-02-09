@@ -58,7 +58,7 @@ class PyNoAir(object):
         self.__updated            = False
         self.__colours            = False
         self.__download_delay     = 15
-        self.__leveltypes         = "80, 90, 100"
+        self.__leveltypes         = "80, 90, 100, 110"
         self.__data               =  []
         self.__date_pattern       = re.compile("(\d{4})/(\d{2})/(\d{2}) (\d{2}):(\d{2}):(\d{2})")
         self.__now                = None
